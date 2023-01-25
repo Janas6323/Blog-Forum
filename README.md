@@ -1,7 +1,7 @@
-<<<<<<< HEAD
+
 # Blog-Forum
 A simple Blog and Forum App, built with Spring Boot (Java)
-=======
+
 
 # Blog / Forum App
 
@@ -16,4 +16,3 @@ More details are coming soon...
 
 - [@Janas6323](https://www.github.com/Janas6323)
 
->>>>>>> master
