@@ -56,4 +56,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Project Files ###
+application.properties
 >>>>>>> master
