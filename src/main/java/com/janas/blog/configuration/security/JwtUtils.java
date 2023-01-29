@@ -5,25 +5,23 @@ import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
-import java.util.Map;
 
 @Component
-public class JwtService {
-    private static final Logger logger = LoggerFactory.getLogger(JwtService.class);
+public class JwtUtils {
+    private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
     @Value("${security.jwt.secret}")
     private String jwtSecret;
     @Value("${security.jwt.expiration-ms}")
-    private static int expirationMs;
-    @Value("&{security.jwt.issuer}")
-    private static String issuer;
-    @Value("${security.jwt.claim-key}")
-    private static String claimKey;
-    @Value("${security.jwt.claim-value}")
-    private static String claimValue;
+    private int expirationMs;
+    @Value("${security.jwt.issuer}")
+    private String issuer;
+    @Value("${security.jwt.claim.key}")
+    private String claimKey;
+    @Value("${security.jwt.claim.value}")
+    private String claimValue;
 
     public boolean validateJwtToken(String authToken) {
         try {
@@ -49,11 +47,11 @@ public class JwtService {
         return Jwts.builder()
                 .claim(claimKey, claimValue)
                 .setSubject(user.getUsername())
-                .setHeader(Map.of("typ","JWT"))
+                .setHeaderParam("typ","JWT")
                 .setIssuer(issuer)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expirationMs))
-                .signWith(SignatureAlgorithm.HS256, jwtSecret)
+                .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
     }
 

@@ -14,12 +14,19 @@ import com.janas.blog.role.Role;
 import com.janas.blog.support.SupportRequest;
 import com.janas.blog.support.SupportSession;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.*;
 
-@Entity @Data @Table(name = "user")
+@Entity @Table(name = "users")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class User {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) @Column(name = "id")
     private Integer id;
@@ -73,4 +80,25 @@ public class User {
     @OneToMany(mappedBy = "reportedUser", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Report> receivedReports;
 
+    public User(String username, String email, String password) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+    }
+
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        if (this.roles == null) {
+            return null;
+        }
+        Collection<GrantedAuthority> authorities = new ArrayList<>();
+
+        for (Role role : this.getRoles()) {
+            authorities.add(new SimpleGrantedAuthority(role.getDisplayName()));
+
+            role.getPrivileges().stream()
+                    .map(privilege -> new SimpleGrantedAuthority(privilege.getDisplayName()))
+                    .forEach(authorities::add);
+        }
+        return authorities;
+    }
 }

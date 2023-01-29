@@ -6,7 +6,7 @@ import lombok.Data;
 
 import java.util.Set;
 
-@Entity @Data @Table(name = "user")
+@Entity @Data @Table(name = "report_reason")
 public class ReportReason {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) @Column(name = "id")
     private Integer id;

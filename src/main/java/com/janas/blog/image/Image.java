@@ -27,7 +27,7 @@ public class Image {
     )
     private Set<Tag> tags;
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JoinColumn(name = "profile_user_id", referencedColumnName = "id")
     private User profilePhotoOwner;
     @ManyToOne @JoinColumn(name = "user_id")
     private User user;
